@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Furia Fitness Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0D0D0D;
+    --bg-2:#161616;
+    --card:#1B1B1B;
+    --orange:#FF4E16;
+    --orange-light:#FF7A47;
+    --white:#F5F5F0;
+    --gray:#8A8A85;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg); color:var(--white); font-family:'Inter',sans-serif; font-weight:400; line-height:1.7;}
+  h1,h2,h3,.display{font-family:'Anton',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.01em; line-height:1.05;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  .eyebrow{font-size:12px; letter-spacing:0.25em; text-transform:uppercase; color:var(--orange); font-weight:700;}
+
+  nav{position:sticky; top:0; z-index:50; background:rgba(13,13,13,0.9); backdrop-filter:blur(6px); border-bottom:1px solid rgba(255,78,22,0.25); transition:box-shadow .3s;}
+  nav.scrolled{box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:78px;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Anton',sans-serif; font-size:22px; letter-spacing:0.02em;}
+  .logo-mark{width:36px; height:36px; background:var(--orange); display:flex; align-items:center; justify-content:center; font-size:16px; transform:skewX(-8deg);}
+  .logo-mark span{transform:skewX(8deg); font-family:'Anton',sans-serif;}
+  .nav-links{display:flex; gap:32px; font-size:14px; text-transform:uppercase; letter-spacing:0.04em; font-weight:600;}
+  .nav-links a{position:relative; padding-bottom:4px;}
+  .nav-links a::after{content:''; position:absolute; left:0; bottom:0; height:2px; width:0; background:var(--orange); transition:width .25s;}
+  .nav-links a:hover::after{width:100%;}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:13px 28px; font-size:13px; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; transition:all .25s; position:relative; overflow:hidden;}
+  .btn::before{content:''; position:absolute; top:0; left:-120%; width:60%; height:100%; background:linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent); transform:skewX(-20deg); transition:left .6s;}
+  .btn:hover::before{left:130%;}
+  .btn-orange{background:var(--orange); color:#0D0D0D; clip-path:polygon(6% 0,100% 0,94% 100%,0 100%);}
+  .btn-orange:hover{background:var(--orange-light); transform:translateY(-2px);}
+  .btn-outline{border:1px solid var(--white); color:var(--white);}
+  .btn-outline:hover{border-color:var(--orange); color:var(--orange); transform:translateY(-2px);}
+  .hamburger{display:none; flex-direction:column; gap:5px; width:26px; background:none; border:none; padding:8px; cursor:pointer;}
+  .hamburger span{display:block; height:2px; width:100%; background:var(--white);}
+  .mobile-nav{display:none; flex-direction:column; background:var(--bg-2); border-bottom:1px solid rgba(255,78,22,0.25); max-height:0; overflow:hidden; transition:max-height .35s;}
+  .mobile-nav.open{max-height:400px;}
+  .mobile-nav a{padding:16px 32px; font-size:14px; text-transform:uppercase; border-top:1px solid rgba(255,78,22,0.12);}
+
+  .hero{position:relative; padding:0; min-height:620px; display:flex; align-items:center; overflow:hidden;}
+  .hero-bg{position:absolute; inset:0; z-index:0;}
+  .hero-bg img{width:100%; height:100%; object-fit:cover; filter:grayscale(30%) brightness(0.42);}
+  .hero-bg::after{content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(13,13,13,0.95) 20%, rgba(13,13,13,0.55) 70%, rgba(13,13,13,0.3));}
+  .hero-content{position:relative; z-index:1; padding:120px 0;}
+  .hero h1{font-size:78px; margin:16px 0 20px;}
+  .hero h1 .accent{color:var(--orange);}
+  .hero p{font-size:17px; color:#C9C9C4; max-width:460px; margin-bottom:36px;}
+  .hero-actions{display:flex; gap:16px;}
+  .hero-eyebrow,.hero h1,.hero p,.hero-actions{opacity:0; animation:rise .8s ease forwards;}
+  .hero h1{animation-delay:.1s;} .hero p{animation-delay:.22s;} .hero-actions{animation-delay:.34s;}
+  @keyframes rise{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
+
+  .stats-bar{background:var(--orange); padding:34px 0;}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); text-align:center;}
+  .stats-grid div h3{font-size:40px; color:#0D0D0D; font-family:'Anton',sans-serif;}
+  .stats-grid div p{font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:#1a1a1a; font-weight:700; margin-top:2px;}
+
+  section{padding:90px 0;}
+  .section-head{max-width:600px; margin-bottom:54px;}
+  .section-head h2{font-size:44px; margin-top:10px;}
+  .section-head p{color:var(--gray); margin-top:14px; font-size:15.5px;}
+  .center{text-align:center; margin-left:auto; margin-right:auto;}
+
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s, transform .7s;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  [style*="--i"]{transition-delay:calc(var(--i) * 80ms);}
+
+  .clases-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .clase-card{position:relative; height:280px; overflow:hidden; border:1px solid rgba(255,78,22,0.15);}
+  .clase-card img{width:100%; height:100%; object-fit:cover; transition:transform .6s;}
+  .clase-card:hover img{transform:scale(1.1);}
+  .clase-overlay{position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(13,13,13,0.92) 100%); display:flex; align-items:flex-end; padding:22px;}
+  .clase-overlay h3{font-size:22px;}
+  .clase-overlay p{font-size:12.5px; color:#C9C9C4; margin-top:4px;}
+
+  .planes-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .plan-card{background:var(--card); border:1px solid #292929; padding:40px 30px; text-align:center; transition:transform .25s, border-color .25s;}
+  .plan-card:hover{transform:translateY(-6px); border-color:var(--orange);}
+  .plan-card.featured{border-color:var(--orange); background:linear-gradient(180deg, rgba(255,78,22,0.08), var(--card));}
+  .plan-tag{display:inline-block; background:var(--orange); color:#0D0D0D; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:5px 14px; margin-bottom:16px;}
+  .plan-card h3{font-size:20px; margin-bottom:8px;}
+  .plan-price{font-family:'Anton',sans-serif; font-size:46px; color:var(--orange); margin:14px 0;}
+  .plan-price span{font-size:14px; color:var(--gray); font-family:'Inter',sans-serif;}
+  .plan-features{list-style:none; margin:24px 0; text-align:left; font-size:14px; color:#C9C9C4;}
+  .plan-features li{padding:9px 0; border-top:1px solid #2a2a2a; display:flex; gap:10px; align-items:center;}
+  .plan-features li::before{content:'✓'; color:var(--orange); font-weight:700;}
+
+  .team-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .team-card{text-align:center;}
+  .team-photo{width:100%; height:220px; overflow:hidden; margin-bottom:14px; border:1px solid #292929;}
+  .team-photo img{width:100%; height:100%; object-fit:cover; filter:grayscale(60%); transition:filter .4s, transform .5s;}
+  .team-card:hover .team-photo img{filter:grayscale(0%); transform:scale(1.06);}
+  .team-card h3{font-size:17px; font-family:'Inter',sans-serif; font-weight:700;}
+  .team-card p{font-size:12.5px; color:var(--orange); text-transform:uppercase; letter-spacing:0.05em; margin-top:2px;}
+
+  .testimonios{background:var(--bg-2);}
+  .test-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .test-card{background:var(--card); padding:30px; border-left:3px solid var(--orange);}
+  .test-card p{font-size:14.5px; color:#C9C9C4; font-style:italic;}
+  .test-card h4{margin-top:16px; font-size:14px; font-family:'Inter',sans-serif; font-weight:700;}
+  .test-card span{font-size:12px; color:var(--gray);}
+
+  .cta{background:linear-gradient(120deg, var(--orange), #C93A0D); text-align:center; padding:80px 0;}
+  .cta h2{font-size:42px; color:#0D0D0D; margin-bottom:20px;}
+  .cta .btn-outline{border-color:#0D0D0D; color:#0D0D0D;}
+  .cta .btn-outline:hover{border-color:#fff; color:#fff;}
+
+  footer{background:var(--bg-2); padding:50px 0 26px; border-top:1px solid #292929;}
+  footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px; align-items:center;}
+  .footer-bottom{text-align:center; font-size:12px; color:#5a5a55; margin-top:36px; padding-top:22px; border-top:1px solid #292929;}
+
+  .whatsapp-float{position:fixed; bottom:22px; right:22px; z-index:100; background:#25D366; color:#0D0D0D; width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.5); animation:pulse 2.6s ease-out infinite;}
+  @keyframes pulse{0%{box-shadow:0 6px 18px rgba(0,0,0,0.5), 0 0 0 0 rgba(37,211,102,0.5);} 70%{box-shadow:0 6px 18px rgba(0,0,0,0.5), 0 0 0 14px rgba(37,211,102,0);} 100%{box-shadow:0 6px 18px rgba(0,0,0,0.5), 0 0 0 0 rgba(37,211,102,0);}}
+
+  @media (max-width:900px){
+    .nav-links{display:none;} .hamburger{display:flex;} .mobile-nav{display:flex;}
+    nav .wrap .btn-orange{display:none;}
+    .hero h1{font-size:46px;} .hero{min-height:auto; padding:60px 0;}
+    .stats-grid{grid-template-columns:repeat(2,1fr); gap:24px;}
+    .clases-grid,.planes-grid{grid-template-columns:repeat(2,1fr);}
+    .team-grid{grid-template-columns:repeat(2,1fr);}
+    .test-grid{grid-template-columns:1fr;}
+    section{padding:56px 0;}
+    .section-head h2{font-size:32px;}
+    footer .wrap{flex-direction:column; text-align:center;}
+  }
+  @media (max-width:560px){
+    .clases-grid,.planes-grid,.team-grid{grid-template-columns:1fr;}
+    .hero-actions{flex-direction:column; align-items:stretch;}
+    .btn{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="logo-mark"><span>F</span></span> Furia Fitness</div>
+    <div class="nav-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#clases">Clases</a>
+      <a href="#planes">Planes</a>
+      <a href="#equipo">Entrenadores</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a class="btn btn-orange" href="https://wa.me/5212461234567" target="_blank">Únete ya</a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#inicio">Inicio</a>
+    <a href="#clases">Clases</a>
+    <a href="#planes">Planes</a>
+    <a href="#equipo">Entrenadores</a>
+    <a href="#contacto">Contacto</a>
+    <a href="https://wa.me/5212461234567" target="_blank" style="color:var(--orange);">Únete ya →</a>
+  </div>
+</nav>
+
+<section class="hero" id="inicio">
+  <div class="hero-bg"><img src="https://images.pexels.com/photos/29259727/pexels-photo-29259727.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Entrenamiento en gimnasio"></div>
+  <div class="wrap hero-content">
+    <span class="eyebrow hero-eyebrow">Gimnasio · Huamantla, Tlaxcala</span>
+    <h1>No hay <span class="accent">límite</span><br>que no puedas<br>romper</h1>
+    <p>Entrenamiento funcional, pesas y clases grupales con entrenadores certificados. Tu primera clase es gratis.</p>
+    <div class="hero-actions">
+      <a class="btn btn-orange" href="#planes">Ver planes</a>
+      <a class="btn btn-outline" href="https://wa.me/5212461234567" target="_blank">Agenda tu clase gratis</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="wrap stats-grid">
+    <div><h3>1,200+</h3><p>Miembros activos</p></div>
+    <div><h3>18</h3><p>Entrenadores certificados</p></div>
+    <div><h3>9</h3><p>Años en la comunidad</p></div>
+    <div><h3>35</h3><p>Clases a la semana</p></div>
+  </div>
+</div>
+
+<section id="clases">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Nuestras clases</span>
+      <h2>Encuentra tu ritmo</h2>
+      <p>Seis disciplinas para todos los niveles, desde principiante hasta atleta competitivo.</p>
+    </div>
+    <div class="clases-grid">
+      <div class="clase-card reveal" style="--i:0">
+        <img src="https://images.pexels.com/photos/3916766/pexels-photo-3916766.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Pesas libres">
+        <div class="clase-overlay"><div><h3>Pesas libres</h3><p>Fuerza e hipertrofia</p></div></div>
+      </div>
+      <div class="clase-card reveal" style="--i:1">
+        <img src="https://images.pexels.com/photos/6389506/pexels-photo-6389506.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Funcional">
+        <div class="clase-overlay"><div><h3>Funcional</h3><p>Resistencia y agilidad</p></div></div>
+      </div>
+      <div class="clase-card reveal" style="--i:2">
+        <img src="https://images.pexels.com/photos/4164508/pexels-photo-4164508.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Crossfit">
+        <div class="clase-overlay"><div><h3>Crossfit</h3><p>Alta intensidad</p></div></div>
+      </div>
+      <div class="clase-card reveal" style="--i:3">
+        <img src="https://images.pexels.com/photos/17210041/pexels-photo-17210041.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Bodybuilding">
+        <div class="clase-overlay"><div><h3>Bodybuilding</h3><p>Definición y volumen</p></div></div>
+      </div>
+      <div class="clase-card reveal" style="--i:4">
+        <img src="https://images.pexels.com/photos/32233887/pexels-photo-32233887.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Boxeo">
+        <div class="clase-overlay"><div><h3>Boxeo</h3><p>Cardio y técnica</p></div></div>
+      </div>
+      <div class="clase-card reveal" style="--i:5">
+        <img src="https://images.pexels.com/photos/27195989/pexels-photo-27195989.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Yoga y movilidad">
+        <div class="clase-overlay"><div><h3>Movilidad</h3><p>Estiramiento y recuperación</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="planes" style="background:var(--bg-2);">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Membresías</span>
+      <h2>Elige tu plan</h2>
+      <p>Sin letras chiquitas. Cancela cuando quieras.</p>
+    </div>
+    <div class="planes-grid">
+      <div class="plan-card reveal" style="--i:0">
+        <h3>Básico</h3>
+        <div class="plan-price">$399<span>/mes</span></div>
+        <ul class="plan-features">
+          <li>Acceso a sala de pesas</li>
+          <li>Horario abierto</li>
+          <li>1 clase grupal por semana</li>
+        </ul>
+        <a class="btn btn-outline" href="https://wa.me/5212461234567" target="_blank" style="width:100%; justify-content:center;">Elegir plan</a>
+      </div>
+      <div class="plan-card featured reveal" style="--i:1">
+        <span class="plan-tag">Más popular</span>
+        <h3>Furia Total</h3>
+        <div class="plan-price">$649<span>/mes</span></div>
+        <ul class="plan-features">
+          <li>Acceso ilimitado</li>
+          <li>Todas las clases grupales</li>
+          <li>1 sesión con entrenador/mes</li>
+          <li>App de seguimiento</li>
+        </ul>
+        <a class="btn btn-orange" href="https://wa.me/5212461234567" target="_blank" style="width:100%; justify-content:center;">Elegir plan</a>
+      </div>
+      <div class="plan-card reveal" style="--i:2">
+        <h3>Elite</h3>
+        <div class="plan-price">$999<span>/mes</span></div>
+        <ul class="plan-features">
+          <li>Todo lo de Furia Total</li>
+          <li>4 sesiones personalizadas/mes</li>
+          <li>Plan de nutrición</li>
+          <li>Acceso a zona VIP</li>
+        </ul>
+        <a class="btn btn-outline" href="https://wa.me/5212461234567" target="_blank" style="width:100%; justify-content:center;">Elegir plan</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="equipo">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Nuestro equipo</span>
+      <h2>Entrenadores certificados</h2>
+      <p>Cada entrenador diseña tu progreso, no solo cuenta tus repeticiones.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal" style="--i:0">
+        <div class="team-photo"><img src="https://images.pexels.com/photos/6046979/pexels-photo-6046979.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Entrenador"></div>
+        <h3>Diego Ramírez</h3><p>Fuerza y acondicionamiento</p>
+      </div>
+      <div class="team-card reveal" style="--i:1">
+        <div class="team-photo"><img src="https://images.pexels.com/photos/32695898/pexels-photo-32695898.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Entrenadora"></div>
+        <h3>Andrea Solís</h3><p>Funcional y HIIT</p>
+      </div>
+      <div class="team-card reveal" style="--i:2">
+        <div class="team-photo"><img src="https://images.pexels.com/photos/3888405/pexels-photo-3888405.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Entrenador"></div>
+        <h3>Marco Hidalgo</h3><p>Bodybuilding</p>
+      </div>
+      <div class="team-card reveal" style="--i:3">
+        <div class="team-photo"><img src="https://images.pexels.com/photos/16366501/pexels-photo-16366501.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Entrenador"></div>
+        <h3>Iván Cortés</h3><p>Boxeo y cardio</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonios">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Testimonios</span>
+      <h2>Lo que dice la comunidad</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal" style="--i:0">
+        <p>"En seis meses cambié por completo mi condición física. Los entrenadores realmente te acompañan."</p>
+        <h4>Paola Jiménez</h4><span>Miembro desde 2024</span>
+      </div>
+      <div class="test-card reveal" style="--i:1">
+        <p>"El ambiente motiva mucho. Las clases de funcional son retadoras pero accesibles para todos los niveles."</p>
+        <h4>Rodrigo Nava</h4><span>Miembro desde 2023</span>
+      </div>
+      <div class="test-card reveal" style="--i:2">
+        <p>"Probé varios gimnasios antes y ninguno me dio el seguimiento que tengo aquí con mi plan personalizado."</p>
+        <h4>Fernanda Ruiz</h4><span>Miembro desde 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta" id="contacto">
+  <div class="wrap">
+    <h2>Tu primera clase va por nosotros</h2>
+    <a class="btn btn-outline" href="https://wa.me/5212461234567" target="_blank">Agenda por WhatsApp</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="logo"><span class="logo-mark"><span>F</span></span> Furia Fitness</div>
+    <div style="font-size:13px; color:var(--gray);">Calle Deportiva 45, Huamantla, Tlaxcala · Lun–Sáb 6:00–22:00</div>
+  </div>
+  <div class="wrap footer-bottom">© 2026 Furia Fitness Club — Todos los derechos reservados</div>
+</footer>
+
+<a class="whatsapp-float" href="https://wa.me/5212461234567" target="_blank" aria-label="Escríbenos por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0D0D0D" stroke-width="1.8">
+    <path d="M20 12a8 8 0 1 1-3.6-6.7L20 4l-1.2 3.4A8 8 0 0 1 20 12Z"/>
+    <path d="M8.5 8.5c0 4 3 7 7 7l1-2-2.5-1-1 1c-1.5-.7-2.5-1.7-3-3l1-1-1-2.5-2 .5Z"/>
+  </svg>
+</a>
+
+<script>
+  const navEl = document.querySelector('nav');
+  window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', window.scrollY > 40));
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => mobileNav.classList.toggle('open'));
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileNav.classList.remove('open')));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
